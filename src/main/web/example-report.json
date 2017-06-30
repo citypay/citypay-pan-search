@@ -1,0 +1,263 @@
+{
+  "name":"Pan Search Scan",
+  "stats":{
+    "NoOp":324,
+    "Hidden":11,
+    "PermissionFailure":4,
+    "Matched":6,
+    "FileScan":226,
+    "Checked":552
+  },
+  "meta":{
+    "java.io.tmpdir":"/var/folders/c0/2clh11lj52b85x92jm62ncf00000gp/T/",
+    "line.separator":"\n",
+    "path.separator":":",
+    "sun.management.compiler":"HotSpot 64-Bit Tiered Compilers",
+    "sun.cpu.endian":"little",
+    "java.specification.version":"1.8",
+    "java.vm.specification.name":"Java Virtual Machine Specification",
+    "java.vendor":"Oracle Corporation",
+    "java.vm.specification.version":"1.8",
+    "user.home":"/Users/gary",
+    "file.encoding.pkg":"sun.io",
+    "ftp.nonProxyHosts":"local|*.local|169.254/16|*.169.254/16",
+    "sun.arch.data.model":"64",
+    "sun.boot.library.path":"/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib",
+    "user.dir":"/Users/gary/git/citypay-pan-search",
+    "java.library.path":"/Users/gary/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.",
+    "sun.cpu.isalist":"",
+    "os.arch":"x86_64",
+    "java.vm.version":"25.73-b02",
+    "java.endorsed.dirs":"/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/endorsed",
+    "java.runtime.version":"1.8.0_73-b02",
+    "java.vm.info":"mixed mode",
+    "java.ext.dirs":"/Users/gary/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java",
+    "java.runtime.name":"Java(TM) SE Runtime Environment",
+    "pan.search.trace":"db2",
+    "file.separator":"/",
+    "java.class.version":"52.0",
+    "java.specification.name":"Java Platform API Specification",
+    "sun.boot.class.path":"/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/classes",
+    "file.encoding":"UTF-8",
+    "user.timezone":"Europe/Jersey",
+    "java.specification.vendor":"Oracle Corporation",
+    "sun.java.launcher":"SUN_STANDARD",
+    "os.version":"10.12.5",
+    "sun.os.patch.level":"unknown",
+    "gopherProxySet":"false",
+    "java.vm.specification.vendor":"Oracle Corporation",
+    "user.country":"US",
+    "sun.jnu.encoding":"UTF-8",
+    "http.nonProxyHosts":"local|*.local|169.254/16|*.169.254/16",
+    "user.language":"en",
+    "socksNonProxyHosts":"local|*.local|169.254/16|*.169.254/16",
+    "user.country.format":"JE",
+    "java.vendor.url":"http://java.oracle.com/",
+    "java.awt.printerjob":"sun.lwawt.macosx.CPrinterJob",
+    "java.awt.graphicsenv":"sun.awt.CGraphicsEnvironment",
+    "awt.toolkit":"sun.lwawt.macosx.LWCToolkit",
+    "java.class.path":"/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/deploy.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/jaccess.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/jfxrt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/javaws.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jfxswt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/plugin.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/ant-javafx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/javafx-mx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/packager.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/lib/tools.jar:/Users/gary/git/citypay-pan-search/target/scala-2.12/classes:/Users/gary/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.2.jar:/Users/gary/.ivy2/cache/org.scala-lang.modules/scala-xml_2.12/bundles/scala-xml_2.12-1.0.6.jar:/Users/gary/.ivy2/cache/org.json4s/json4s-scalap_2.12/jars/json4s-scalap_2.12-3.5.2.jar:/Users/gary/.ivy2/cache/org.json4s/json4s-native_2.12/jars/json4s-native_2.12-3.5.2.jar:/Users/gary/.ivy2/cache/org.json4s/json4s-core_2.12/jars/json4s-core_2.12-3.5.2.jar:/Users/gary/.ivy2/cache/org.json4s/json4s-ast_2.12/jars/json4s-ast_2.12-3.5.2.jar:/Users/gary/.ivy2/cache/com.thoughtworks.paranamer/paranamer/bundles/paranamer-2.8.jar:/Users/gary/git/citypay-pan-search/lib/mysql-connector-java-5.1.42.jar:/Users/gary/.ivy2/cache/com.typesafe/config/bundles/config-1.3.1.jar:/Users/gary/.ivy2/cache/net.sf.sevenzipjbinding/sevenzipjbinding-all-platforms/jars/sevenzipjbinding-all-platforms-9.20-2.00beta.jar:/Users/gary/.ivy2/cache/net.sf.sevenzipjbinding/sevenzipjbinding/jars/sevenzipjbinding-9.20-2.00beta.jar:/Users/gary/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.25.jar:/Users/gary/.ivy2/cache/org.slf4j/slf4j-simple/jars/slf4j-simple-1.7.25.jar:/Users/gary/.ivy2/cache/com.google.guava/guava/bundles/guava-15.0.jar:/Users/gary/.ivy2/cache/com.jolbox/bonecp/bundles/bonecp-0.8.0.RELEASE.jar:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar",
+    "os.name":"Mac OS X",
+    "java.vm.vendor":"Oracle Corporation",
+    "java.vendor.url.bug":"http://bugreport.sun.com/bugreport/",
+    "user.name":"gary",
+    "java.vm.name":"Java HotSpot(TM) 64-Bit Server VM",
+    "sun.java.command":"com.citypay.pan.search.Scanner",
+    "java.home":"/Library/Java/JavaVirtualMachines/jdk1.8.0_73.jdk/Contents/Home/jre",
+    "java.version":"1.8.0_73",
+    "sun.io.unicode.encoding":"UnicodeBig"
+  },
+  "matches":[
+
+  ],
+  "subReports":[
+    {
+      "name":"NIO",
+      "stats":{
+        "NoOp":324,
+        "Hidden":11,
+        "PermissionFailure":4,
+        "Matched":6,
+        "FileScan":226,
+        "Checked":552
+      },
+      "meta":{
+
+      },
+      "matches":[
+
+      ],
+      "subReports":[
+        {
+          "name":"File scan /Users/gary/Desktop",
+          "stats":{
+            "NoOp":307,
+            "Hidden":11,
+            "Matched":5,
+            "FileScan":127,
+            "Checked":434
+          },
+          "meta":{
+
+          },
+          "matches":[
+            {
+              "location":"/Users/gary/Desktop/AIB/201511171256.TRIAL",
+              "system":"/Users/gary/Desktop",
+              "result":"Found Visa Business in /Users/gary/Desktop/AIB/201511171256.TRIAL at position 5:4",
+              "to":{
+                "colNo":19,
+                "lineNo":5
+              },
+              "offset":0,
+              "maskedValue":"401200******1112",
+              "from":{
+                "colNo":4,
+                "lineNo":5
+              },
+              "spec":{
+                "id":"VB",
+                "leading":401,
+                "name":"Visa Business",
+                "logo":"cs-logo-vi"
+              },
+              "value":"4012001037141112"
+            },
+            {
+              "location":"/Users/gary/Desktop/cardscans/cm-ccsrch.log",
+              "system":"/Users/gary/Desktop",
+              "result":"Found Visa Business in /Users/gary/Desktop/cardscans/cm-ccsrch.log at position 7:64",
+              "to":{
+                "colNo":79,
+                "lineNo":7
+              },
+              "offset":0,
+              "maskedValue":"478592******1180",
+              "from":{
+                "colNo":64,
+                "lineNo":7
+              },
+              "spec":{
+                "id":"VB",
+                "leading":478,
+                "name":"Visa Business",
+                "logo":"cs-logo-vi"
+              },
+              "value":"4785922320681180"
+            },
+            {
+              "location":"/Users/gary/Desktop/cardscans/nm-ccsrch.log",
+              "system":"/Users/gary/Desktop",
+              "result":"Found MasertCard Maestro in /Users/gary/Desktop/cardscans/nm-ccsrch.log at position 7:71",
+              "to":{
+                "colNo":86,
+                "lineNo":7
+              },
+              "offset":0,
+              "maskedValue":"557700******0000",
+              "from":{
+                "colNo":71,
+                "lineNo":7
+              },
+              "spec":{
+                "id":"MD",
+                "leading":557,
+                "name":"MasterCard Debit",
+                "logo":"cs-logo-mc"
+              },
+              "value":"5577000000770000"
+            },
+            {
+              "location":"/Users/gary/Desktop/cardscans/rb-ccsrch.log",
+              "system":"/Users/gary/Desktop",
+              "result":"Found American Express in /Users/gary/Desktop/cardscans/rb-ccsrch.log at position 7:59",
+              "to":{
+                "colNo":73,
+                "lineNo":7
+              },
+              "offset":0,
+              "maskedValue":"376000*****0041",
+              "from":{
+                "colNo":59,
+                "lineNo":7
+              },
+              "spec":{
+                "id":"AX",
+                "leading":376,
+                "name":"American Express",
+                "logo":"cs-logo-ax"
+              },
+              "value":"376000130000041"
+            },
+            {
+              "location":"/Users/gary/Desktop/cardscans/th-ccsrch.log",
+              "system":"/Users/gary/Desktop",
+              "result":"Found Visa Business in /Users/gary/Desktop/cardscans/th-ccsrch.log at position 7:106",
+              "to":{
+                "colNo":121,
+                "lineNo":7
+              },
+              "offset":0,
+              "maskedValue":"457607******0011",
+              "from":{
+                "colNo":106,
+                "lineNo":7
+              },
+              "spec":{
+                "id":"VB",
+                "leading":457,
+                "name":"Visa Business",
+                "logo":"cs-logo-vi"
+              },
+              "value":"4576071400000011"
+            }
+          ],
+          "subReports":[
+
+          ]
+        },
+        {
+          "name":"File scan /var/log",
+          "stats":{
+            "NoOp":17,
+            "PermissionFailure":4,
+            "Matched":1,
+            "FileScan":99,
+            "Checked":118
+          },
+          "meta":{
+
+          },
+          "matches":[
+            {
+              "location":"/var/log/asl/BB.2017.10.31.G80.asl",
+              "system":"/var/log",
+              "result":"Found Visa Business in /var/log/asl/BB.2017.10.31.G80.asl at position 2:423",
+              "to":{
+                "colNo":442,
+                "lineNo":2
+              },
+              "offset":0,
+              "maskedValue":"478863******1486",
+              "from":{
+                "colNo":423,
+                "lineNo":2
+              },
+              "spec":{
+                "id":"VB",
+                "leading":478,
+                "name":"Visa Business",
+                "logo":"cs-logo-vi"
+              },
+              "value":"4788633957851486"
+            }
+          ],
+          "subReports":[
+
+          ]
+        }
+      ]
+    }
+  ]
+}
+

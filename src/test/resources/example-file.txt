@@ -1,0 +1,1 @@
+This is a test file that contains a card number for testing purposes with citypay-pan-search such as 4000-0000-0000-0002

@@ -1,0 +1,81 @@
+<html ng-app="CPPS">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="report.js"></script>
+
+
+    <script type="text/ng-template" id="scan_report.html">
+
+        <h2>{{ report.name }} </h2>
+        <div class="alert alert-danger" ng-if="report.matches.length > 0" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ report.stats.Matched }} potential matches found!
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2" ng-repeat="(key, stat) in report.stats">
+                {{ key }}: <b>{{ stat | number }}</b>
+            </div>
+        </div>
+
+        <hr/>
+        <h3 ng-if="report.matches.length > 0">Matches</h3>
+        <div class="row" ng-repeat="m in report.matches">
+            <div class="col-sm-2 small-text">
+                {{ m.system }}
+            </div>
+            <div class="col-sm-2">
+                <img src="images/{{ m.spec.logo }}-250.png" height="21"/>
+                {{ m.maskedValue }}
+            </div>
+            <div class="col-sm-6 small-text">
+                {{ m.location }}
+            </div>
+
+            <div class="col-sm-1">{{ m.from.lineNo }}:{{ m.from.colNo }}</div>
+            <div class="col-sm-1">{{ m.to.lineNo }}:{{ m.to.colNo }}</div>
+        </div>
+
+        <div ng-repeat="report in report.subReports" ng-include="'scan_report.html'">
+
+    </script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous"/>
+    <style>
+        .small-text {
+            font-size: 12px;
+        }
+
+        .row {
+            border-bottom: 1px solid #CCC;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+
+<div  class="container" ng-controller="CPPS">
+    <h1>Pan Search Report</h1>
+
+
+    {{ data.meta['os.name'] }}
+    <div ng-repeat="report in data.subReports" ng-include="'scan_report.html'">
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
