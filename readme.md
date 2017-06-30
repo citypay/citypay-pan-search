@@ -1,5 +1,7 @@
-CityPay PCI PAN Search
-===
+# CityPay PCI PAN Search
+
+[![Build Status](https://circleci.com/gh/citypay/citypay-pan-search.svg?&style=shield)](https://circleci.com/gh/citypay/citypay-pan-search)
+
 
 CityPay's PAN search is a Scala/Java tool for searching locations for the existence of sensitive primary cardholder data.
  
