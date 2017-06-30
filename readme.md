@@ -1,8 +1,7 @@
-CityPay PCI PAN Scanner
+CityPay PCI PAN Search
 ===
 
-CityPay's PAN scanner is a Scala/Java tool for searching locations for the existence of sensitive primary card holder 
-data. 
+CityPay's PAN search is a Scala/Java tool for searching locations for the existence of sensitive primary cardholder data.
  
 The scanner is able to scan multiple sources such as
   - Multiple Operating Systems including Microsoft &reg; Windows 32/64, Mac OSX 32/64, Linux 32/64, Arm 
