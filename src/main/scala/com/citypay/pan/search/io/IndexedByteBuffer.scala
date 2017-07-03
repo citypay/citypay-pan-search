@@ -5,6 +5,7 @@ import com.citypay.pan.search.util.Location
 case class IndexedPosition(offset: Int, location: Location = Location(0, 0))
 object IndexedPosition {
   val Undefined = IndexedPosition(-1)
+  val NULL_BYTE: Byte = 0x0
 }
 
 /**
@@ -13,6 +14,8 @@ object IndexedPosition {
   * @param sz the size of the buffer
   */
 class IndexedByteBuffer(sz: Int) {
+
+  import IndexedPosition._
 
   private var _pos = 0
   private var _offset = 0
@@ -48,7 +51,7 @@ class IndexedByteBuffer(sz: Int) {
 
   def get(i: Int): Byte = inspectionBuffer(i)
 
-  def toString(offset: Int, len: Int) = new String(inspectionBuffer, offset, len)
+  def toString(offset: Int, len: Int): String = new String(inspectionBuffer, offset, len)
 
   def length: Int = sz - _offset
 
@@ -73,7 +76,7 @@ class IndexedByteBuffer(sz: Int) {
     if (_pos > 0) {
       // rewind and push the initialisation buffer through
       for (i <- 0 until sz) {
-        inspectionBuffer(i) = 0x0
+        inspectionBuffer(i) = NULL_BYTE
         inspectionIndex(i) = IndexedPosition.Undefined
       }
     }
@@ -92,7 +95,7 @@ class IndexedByteBuffer(sz: Int) {
 
     for (i <- 0 until _pos) {
       if (i > _pos - count) {
-        inspectionBuffer(i) = 0x0
+        inspectionBuffer(i) = NULL_BYTE
         inspectionIndex(i) = IndexedPosition.Undefined
       } else {
         inspectionBuffer(i) = inspectionBuffer(i + count)
@@ -101,11 +104,13 @@ class IndexedByteBuffer(sz: Int) {
 
     }
     inspectionIndex(_pos) = IndexedPosition.Undefined
-    inspectionBuffer(_pos) = 0x0
+    inspectionBuffer(_pos) = NULL_BYTE
     _pos = _pos - 1
     _pos
   }
 
+
+  //noinspection ScalaStyle
   def lastEnteredIndex: Int = if (_pos <= 0 || inspectionIndex == null) 0 else {
     val i = inspectionIndex(_pos - 1)
     if (i == null) 0 else i.offset

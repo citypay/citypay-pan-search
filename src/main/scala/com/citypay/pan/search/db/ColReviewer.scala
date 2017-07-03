@@ -1,3 +1,24 @@
+// MIT License
+//
+// Copyright (c) 2017 CityPay
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 package com.citypay.pan.search.db
 
 import java.sql.{Connection, ResultSet, Statement, Types}
@@ -11,6 +32,10 @@ import scala.annotation.tailrec
 import scala.util.Try
 import scala.util.control.NonFatal
 
+object ColReviewer {
+  val MaxFieldSize = 16384
+}
+
 /**
   * @param ds       a data source which enables connection to the database
   * @param tableDef the table definition to run
@@ -21,6 +46,8 @@ class ColReviewer(ds: BoneCP,
                   val source: ScanSource,
                   val scanListener: ScanListener,
                   val sec: ScanExecutionContext) extends ScanExecutor with ScanReviewer with Loggable with Timeable {
+
+  import ColReviewer._
 
   override def system: String = tableDef.toString
 
@@ -36,13 +63,13 @@ class ColReviewer(ds: BoneCP,
   private var st: Statement = _
   private var rs: ResultSet = _
 
-  def sqlescape(str: String): String = s"`$str`"
+  def sqlEscape(str: String): String = s"`$str`"
 
   def sql(): String =
     s"""
-       |SELECT ${tableDef.lookupColNames.map(sqlescape).mkString(",")}
+       |SELECT ${tableDef.lookupColNames.map(sqlEscape).mkString(",")}
        |FROM `${tableDef.name}`
-       |${if (tableDef.primaryKeysCols.nonEmpty) tableDef.primaryKeysCols.map(sqlescape).mkString("ORDER BY ", ",", "") else ""}
+       |${if (tableDef.primaryKeysCols.nonEmpty) tableDef.primaryKeysCols.map(sqlEscape).mkString("ORDER BY ", ",", "") else ""}
      """.stripMargin.trim
 
 
@@ -56,7 +83,7 @@ class ColReviewer(ds: BoneCP,
       conn = ds.getConnection
       st = conn.createStatement(ResultSet.FETCH_FORWARD, ResultSet.CONCUR_READ_ONLY)
       st.setFetchSize(fetchSize)
-      st.setMaxFieldSize(16384)
+      st.setMaxFieldSize(MaxFieldSize)
 
       try {
 
@@ -100,16 +127,16 @@ class ColReviewer(ds: BoneCP,
   }
 
   private def reviewString(col: Col, pk: String, str: String): ReviewResult = {
-    if (str.length < sec.sc.minimumLength)
+    if (str.length < sec.sc.minimumLength) {
       ReviewResult()
-    else {
+    } else {
 
       val array = str.getBytes("UTF-8")
       analysisBuffer.rewind()
       analysisBuffer.put(array)
       analysisBuffer.rewind()
 
-      // todo overlfow of addition to the analysis buffer, initial sizes shouldn't block us currently
+      // todo overflow of addition to the analysis buffer, initial sizes shouldn't block us currently
       val result = reviewAnalysisBuffer(0, array.length, s"$pk ${col.name}", ReviewResult())
       inspectionBuffer.reset()
       result
@@ -122,39 +149,41 @@ class ColReviewer(ds: BoneCP,
     if (ctx.stopOnFirstMatch && accumulativeResult.matches.nonEmpty) {
       traceEnd("stopOnFirstMatch, returning found result")
       report.incStat("RowsScanned", i - 1)
-      return accumulativeResult
-    }
-
-    if (rs.next()) {
-
-      scanListener.scanItem(source, s"Row $i")
-
-      val pk = tableDef.primaryKeysCols.map(s => s"$s=${rs.getString(s)}").mkString(",")
-
-      val reviewed = tableDef.cols.foldLeft(accumulativeResult)((r, col) => {
-
-        report.incStat("Columns")
-        val colReview = reviewCol(col, pk)
-        trace(s", ${col.name}=${colReview.matches.size}")
-        r ++ colReview
-      })
-
-
-      traceEnd()
-
-      // recursive review of each row, accumulating as we progress
-      reviewRows(i + 1, rs)(reviewed)
-    } else {
-      //      debug("No further rows")
-
-      report.incStat("RowsScanned", i)
       accumulativeResult
+    } else {
+
+      if (rs.next()) {
+
+        scanListener.scanItem(source, s"Row $i")
+
+        val pk = tableDef.primaryKeysCols.map(s => s"$s=${rs.getString(s)}").mkString(",")
+
+        val reviewed = tableDef.cols.foldLeft(accumulativeResult)((r, col) => {
+
+          report.incStat("Columns")
+          val colReview = reviewCol(col, pk)
+          trace(s", ${col.name}=${colReview.matches.size}")
+          r concat colReview
+        })
+
+
+        traceEnd()
+
+        // recursive review of each row, accumulating as we progress
+        reviewRows(i + 1, rs)(reviewed)
+      } else {
+        //      debug("No further rows")
+
+        report.incStat("RowsScanned", i)
+        accumulativeResult
+      }
+
     }
   }
 
 
   private def reviewCol(c: Col, pk: String)(implicit accumulativeResult: ReviewResult): ReviewResult = {
-    accumulativeResult ++ (c.dataType match {
+    accumulativeResult concat (c.dataType match {
       case Types.VARCHAR => reviewColString(c, pk)
       case Types.NVARCHAR => reviewColString(c, pk)
       case Types.CHAR => reviewColString(c, pk)
@@ -170,11 +199,6 @@ class ColReviewer(ds: BoneCP,
     Try(rs.close())
     Try(st.close())
     Try(conn.close())
-
-    // set aggressively to null for gc
-    rs = null
-    st = null
-    conn = null
   }
 
 }

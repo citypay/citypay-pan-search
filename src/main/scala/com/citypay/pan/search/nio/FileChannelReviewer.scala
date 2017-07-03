@@ -56,7 +56,7 @@ class FileChannelReviewer(file: File,
         reviewFileChannel(
           channel,
           offset + read,
-          accumulativeResult ++ reviewed
+          accumulativeResult concat reviewed
         )
 
 

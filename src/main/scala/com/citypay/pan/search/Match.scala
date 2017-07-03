@@ -2,6 +2,10 @@ package com.citypay.pan.search
 
 import com.citypay.pan.search.util.Location
 
+object Match {
+  val BinLeading: Int = 6
+  val SuffixLen: Int = 4
+}
 
 /**
   * A match which is found by inspection
@@ -27,9 +31,10 @@ case class Match(searchSpec: PanSpec,
 
   def maskedValue: String = {
     val s = "*" * (expectedValue.length - 10)
-    new String(expectedValue, 0, 6) + s + new String(expectedValue, expectedValue.length - 4, 4)
+    new String(expectedValue, 0, Match.BinLeading) + s +
+      new String(expectedValue, expectedValue.length - Match.SuffixLen, Match.SuffixLen)
   }
 
-  def value = new String(expectedValue)
+  def value: String = new String(expectedValue)
 
 }

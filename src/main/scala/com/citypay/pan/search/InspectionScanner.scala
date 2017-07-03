@@ -8,9 +8,9 @@ import com.citypay.pan.search.util.{Location, LuhnCheck, Tracer}
   */
 trait InspectionResult {}
 
-case class InspectedProposedFind(value: String, offset: Int, from: Location, to: Location) extends InspectionResult
+final case class InspectedProposedFind(value: String, offset: Int, from: Location, to: Location) extends InspectionResult
 
-case class InspectedPotential(offset: Int, from: Location, to: Location) extends InspectionResult
+final case class InspectedPotential(offset: Int, from: Location, to: Location) extends InspectionResult
 
 object InspectionNoMatch extends InspectionResult {
   override def toString: String = "InspectionNoMatch"
@@ -60,6 +60,7 @@ object InspectionScanner {
 
         // breakout if non numeric
         if (b < 0x30 || b > 0x39) {
+          //noinspection ScalaStyle
           return InspectionNoMatch
         }
 
@@ -71,6 +72,7 @@ object InspectionScanner {
           // if we are in the leading range, the value must be a direct match, continue or breakout as false
           if (spec.leadingBytes(i - offset) != b) {
             trace(", mismatch (%02X != %02X)", spec.leadingBytes(i - offset), b)
+            //noinspection ScalaStyle
             return InspectionNoMatch
           }
 
@@ -84,11 +86,13 @@ object InspectionScanner {
           trace(s"proposed(offset=$offset, len=${i + 1}, arrlen=(${inspectionBuffer.length}))")
           val proposed = inspectionBuffer.toString(offset, i + 1)
           if (tracer(", luhn")(LuhnCheck(proposed))) {
+            //noinspection ScalaStyle
             return InspectedProposedFind(proposed, offset, Location(startLine, startCol),
               Location(inspectionBuffer.channelIndexLineNo(i), inspectionBuffer.channelIndexColNo(i))
             )
           } else if (i >= spec.maxLength - 1) {
             traceEnd(", len-exhausted")
+            //noinspection ScalaStyle
             return InspectionNoMatch
           }
         }

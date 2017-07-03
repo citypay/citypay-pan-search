@@ -38,8 +38,11 @@ case class PanSpec(name: String,
     * @return any leading digit at the given index or None if overflowed
     */
   def nLeadingDigit(i: Int): Option[Int] = {
-    if (leadingChars.length > i) None
-    else Some(leadingChars(i).toString.toInt)
+    if (leadingChars.length > i) {
+      None
+    } else {
+      Some(leadingChars(i).toString.toInt)
+    }
   }
 
   private val leadingArr = leading.toString.toCharArray.map(_.toByte)

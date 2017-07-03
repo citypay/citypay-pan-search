@@ -27,7 +27,6 @@ class JsonRenderer(ps: PrintStream, config: Config) extends ReportRenderer {
 
     val str = Serialization.writePretty(rpt)
 
-    println(str)
     ps.write(str.getBytes("UTF-8"))
     ps.write("\n\n".getBytes("UTF-8"))
     ps.flush()
@@ -86,28 +85,25 @@ class JsonRenderer(ps: PrintStream, config: Config) extends ReportRenderer {
 
   private def newLine = if (prettyPrint) "\n" else ""
 
-  def tlv(key: String, value: Any, indent: Int = 1, prerendered: Boolean = false): String = {
-
-    def jsonValue(a: Any): String = a match {
-      case i: Byte => i.toString
-      case i: Int => i.toString
-      case i: Long => i.toString
-      case i: Double => i.toString
-      case i: Float => i.toString
-      case i: Boolean => i.toString
-      case arr: Array[_] => arr.map(jsonValue).mkString("[", ",", "]")
-      case list: List[_] => list.map(jsonValue).mkString("[", ",", "]")
-      case m: Map[_, _] => m.map(t => tlv(String.valueOf(t._1), t._2, indent + 1)).mkString("{", ",", s"$newLine${ind(indent)}}")
-      case s: String if prerendered => s
-      case s: String => s""""$s""""
-      case _ => String.valueOf(value)
-    }
-
-    val j = jsonValue(value)
-    if (j.length > 0 && j != "[]")
-      s"""$newLine${ind(indent)}"$key":$j"""
-    else
-      ""
-  }
+//  def tlv(key: String, value: Any, indent: Int = 1, prerendered: Boolean = false): String = {
+//
+//    def jsonValue(a: Any): String = a match {
+//      case i: Byte => i.toString
+//      case i: Int => i.toString
+//      case i: Long => i.toString
+//      case i: Double => i.toString
+//      case i: Float => i.toString
+//      case i: Boolean => i.toString
+//      case arr: Array[_] => arr.map(jsonValue).mkString("[", ",", "]")
+//      case list: List[_] => list.map(jsonValue).mkString("[", ",", "]")
+//      case m: Map[_, _] => m.map(t => tlv(String.valueOf(t._1), t._2, indent + 1)).mkString("{", ",", s"$newLine${ind(indent)}}")
+//      case s: String if prerendered => s
+//      case s: String => s""""$s""""
+//      case _ => String.valueOf(value)
+//    }
+//
+//    val j = jsonValue(value)
+//    if (j.length > 0 && j != "[]") s"""$newLine${ind(indent)}"$key":$j""" else ""
+//  }
 
 }

@@ -25,7 +25,7 @@ class ScanExecutionContext(val sc: SearchContext,
     override def offer(e: Runnable): Boolean = {
       try {
         put(e)
-        return true
+        true
       } catch {
         case ie: InterruptedException => Thread.currentThread().interrupt()
       }
@@ -59,9 +59,9 @@ class ScanExecutionContext(val sc: SearchContext,
 
   def queue(source: ScanSource, listener: ScanListener, ex: ScanExecutor): Option[Future[ScanReport]] = lock {
 
-    if (executor.isShutdown || executor.isTerminating || executor.isTerminated)
+    if (executor.isShutdown || executor.isTerminating || executor.isTerminated) {
       None
-    else {
+    } else {
 
 
       // set to Java concurrency implementation due to scala's Promise/Future process async submission process

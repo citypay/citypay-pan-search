@@ -24,6 +24,7 @@ class CommandLineCredentials extends CredentialsCallback {
 
 }
 
+//noinspection ScalaStyle
 class NoOpCredentials extends CredentialsCallback {
   override def getUsername: String = null
   override def getPassword: String = null

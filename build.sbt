@@ -1,3 +1,5 @@
+enablePlugins(JavaAppPackaging)
+
 import sbt.Keys.libraryDependencies
 
 lazy val sevenzipjbindingVersion = "9.20-2.00beta"
@@ -21,3 +23,18 @@ lazy val root = (project in file("."))
       "org.slf4j" % "slf4j-simple" % "1.7.25"
     )
   )
+
+
+mainClass in Compile := Some("com.citypay.pan.search.Scanner")
+
+mappings in Universal <+= (packageBin in Compile, sourceDirectory ) map {(_, src) =>
+      src / "main" / "resources" / "chd.conf" -> "conf/chd.conf"
+}
+mappings in Universal <+= (packageBin in Compile, sourceDirectory ) map {(_, src) =>
+  src / "main" / "resources" / "scanner.conf" -> "conf/scanner.conf"
+}
+mappings in Universal <+= (packageBin in Compile, sourceDirectory ) map {(_, src) =>
+  src / "main" / "resources" / "search.conf" -> "conf/search.conf"
+}
+
+

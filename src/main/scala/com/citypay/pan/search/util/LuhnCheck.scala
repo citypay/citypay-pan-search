@@ -10,12 +10,14 @@ object LuhnCheck {
       val sum = char.map(_.toString.toInt).reverse.grouped(2).map(c => {
         val i = if (c.length > 1) {
           val d = c(1) * 2
-          if (d > 9)
+          if (d > 9) {
             1 + (d % 10)
-          else
+          } else {
             d
+          }
+        } else {
+          0
         }
-        else 0
         i + c(0)
       })
       sum.sum % 10 == 0

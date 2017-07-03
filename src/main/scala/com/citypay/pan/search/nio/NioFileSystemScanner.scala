@@ -95,13 +95,13 @@ case class NioFileSystemScanner(root: List[String],
         if (!file.canRead) {
           sec.report.incStat(PermissionFailure)
         } else {
-          if (file.isFile && (file.isHidden || fileName.startsWith(".")) && includeHiddenFiles)
+          if (file.isFile && (file.isHidden || fileName.startsWith(".")) && includeHiddenFiles) {
             scanFile(system, file)
-          else if (file.isHidden || fileName.startsWith("."))
+          } else if (file.isHidden || fileName.startsWith(".")) {
             sec.report.incStat(Hidden)
-          else if (file.isFile && !file.isHidden)
+          } else if (file.isFile && !file.isHidden) {
             scanFile(system, file)
-          else if (file.isDirectory && recursive && isUnderMaxDepth) {
+          } else if (file.isDirectory && recursive && isUnderMaxDepth) {
             scanDirPath(system, path, depth + 1)
           }
         }

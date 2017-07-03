@@ -87,6 +87,7 @@ class JdbcScanner(driver: String,
   override def close(): Unit = {
   }
 
+  //noinspection ScalaStyle
   private def loadTableMetaData(context: SearchContext): List[TableDef] = {
 
     withConn(ds) { conn =>

@@ -3,6 +3,7 @@ package com.citypay.pan.search.util
 object Hex {
 
   private val hexChars = "0123456789ABCDEF".toCharArray
+  //noinspection ScalaStyle
   private val hexTable: Array[Byte] = {
     val a = Array.fill(128)(-1)
     "0123456789".foreach(ch => a(ch.toInt) = ch - '0')
@@ -26,7 +27,7 @@ object Hex {
     res
   }
 
-  private def RestrictHex(str: String): String = {
+  private def restrictHex(str: String): String = {
     str.replaceAll("0x", "").filter(d =>
       (d >= '0' && d <= '9') ||
         (d >= 'a' && d <= 'f') ||
@@ -35,7 +36,7 @@ object Hex {
   }
 
   def fromHex(str: String): Array[Byte] = {
-    val t = RestrictHex(str)
+    val t = restrictHex(str)
     val e = if (t.length % 2 == 0) t else "0" + t // insert 0.
     val dst = new Array[Byte](e.length / 2)
     val a = e.toCharArray

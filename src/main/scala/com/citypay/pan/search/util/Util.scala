@@ -3,14 +3,12 @@ package com.citypay.pan.search.util
 import java.io.{BufferedReader, InputStreamReader}
 import java.lang.management.ManagementFactory
 import java.nio.ByteBuffer
-import javax.management.MBeanServerFactory
 
 import com.sun.management.UnixOperatingSystemMXBean
 
 import scala.annotation.tailrec
 import scala.util.Try
-import scala.util.control.NonFatal
-
+import Math._
 
 /**
   * Util classes used by the scanner
@@ -18,18 +16,15 @@ import scala.util.control.NonFatal
   */
 object Util {
 
-  // todo unit test
-  def DigitsInNumber(i: Int): Int = (Math.floor(Math.log10(i)) + 1).toInt
+  def DigitsInNumber(i: Int): Int = (floor(log10(abs(i))) + 1).toInt
 
-  // todo unit test
   def FirstDigit(i: Int): Int = {
     @tailrec
-    def calc(x: Int, j: Int): Int = {
+    def div10To0(x: Int, j: Int): Int = {
       if (j == 0) x
-      else calc(j % 10, j / 10)
+      else div10To0(j % 10, j / 10)
     }
-
-    calc(i, i)
+    div10To0(i, i)
   }
 
   def hexDump(src: ByteBuffer): String = {
@@ -81,10 +76,11 @@ object Util {
   }
 
   def use[A <: {def close() : Unit}, B](resource: A)(code: A ⇒ B): B = {
-    try
+    try {
       code(resource)
-    finally
+    } finally {
       resource.close
+    }
   }
 
   def getPID: Int = Try(ManagementFactory.getRuntimeMXBean.getName.split("@")(0).toInt).getOrElse(0)
