@@ -18,13 +18,20 @@ object ScanSourceConfigFactory {
       .flatMap(c => adapt(c.toConfig))
   }
 
+  def expandRoots(list: List[String]): List[String] = {
+    list.collect {
+      case "user.home" => System.getProperty("user.home")
+      case s:String => s
+    }
+  }
+
   def adapt(c: Config): Option[ScanSource] = {
     Option(c.getString("type").toLowerCase match {
 
       case "file" =>
 
         NioFileSystemScanner(
-          c.getStringList("root").asScala.toList,
+          expandRoots(c.getStringList("root").asScala.toList),
           c.string("pattern", "**"), // default glob
           c.stringOpt("exclude"),
           c.boolean("includeHiddenFiles", default = false),
