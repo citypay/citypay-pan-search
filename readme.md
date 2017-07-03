@@ -17,6 +17,24 @@ The scanner is able to scan multiple sources such as
   
   Note that all card holder data including PANs within unit tests supplied with this source code
   are *test data* and generated with a valid luhn checksum.
+
+## Pre-requisites
+
+To run the search tool you will need to ensure a valid Java 8 runtime is installed on the system.
+
+## Installation and Getting Started
+  
+The scanner can create a deployment package by using [sbt-native-packager](http://www.scala-sbt.org/sbt-native-packager/index.html)
+and running one of the following
+
+- Generate a deployment zip `sbt universal:packageBin`
+- Generate a deployment tarball `sbt universal:packageZipTarball`
+- Generate a deployment Xz tarball `sbt universal:packageXzTarball`
+
+To run the scanner, extract the deployment archive to a directory (`CP_SEARCH_ROOT`). The directories should appear 
+  1. `bin` contains binary files `bin/citypay-pan-search` and `bin/citypay-pan-search.bat` for executing the bin search 
+  2. `conf` contains configuration files as listed below
+  2. `lib` contains library files used by the pan search process 
   
 ## Configuration Options
 
