@@ -34,7 +34,10 @@ and running one of the following
 To run the scanner, extract the deployment archive to a directory (`CP_SEARCH_ROOT`). The directories should appear 
   1. `bin` contains binary files `bin/citypay-pan-search` and `bin/citypay-pan-search.bat` for executing the bin search 
   2. `conf` contains configuration files as listed below
-  2. `lib` contains library files used by the pan search process 
+  3. `lib` contains library files used by the pan search process
+   
+Once running, execute the binary file `bin/citypay-pan-search` and you will be presented with a console progress bar
+   ``` scanner-svc-0|========================> | A: 61400 | C: 61400 | M: 1520 | 0100%```
   
 ## Configuration Options
 
