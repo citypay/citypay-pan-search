@@ -1,6 +1,8 @@
 package com.citypay.pan.search
 
 import java.io.{File, FileOutputStream, PrintStream}
+import java.net.InetAddress
+import java.time.LocalDate
 import java.util.concurrent.{CountDownLatch, Executors}
 
 import com.citypay.pan.search.report.ReportRendererFactory
@@ -21,6 +23,16 @@ object Scanner extends Loggable with Timeable {
 
   implicit private val ex = ExecutionContext.fromExecutorService(Executors.newCachedThreadPool(NamedThreadFactory("scanner-svc")))
 
+  import java.util
+
+  private def localName = {
+    val env = System.getenv
+    val names = "HOSTNAME,HOST,COMPUTERNAME".split(",")
+    names.foldLeft[Option[String]](None)((prev, s2) =>
+      prev.orElse(Option(env.get(s2)))
+    ).getOrElse(InetAddress.getLocalHost.getHostName).toLowerCase
+  }
+
   def runScan(setupConfig: String = "scanner",
               searchConfig: String = "search",
               chdConfig: String = "chd"): Unit = {
@@ -32,9 +44,9 @@ object Scanner extends Loggable with Timeable {
 
     implicit val ctx = new SearchContext {
 
-      override def sources: List[ScanSource] = ScanSourceConfigFactory(searchConf)
+      override def sources = ScanSourceConfigFactory(searchConf)
 
-      override def config: ScannerConfig = ScannerConfig(setupConf)
+      override def config = ScannerConfig(setupConf)
 
       override def level1: List[PanSpec] = PanSpec.load(chdConf, 1)
 
@@ -44,7 +56,7 @@ object Scanner extends Loggable with Timeable {
 
     }
 
-    val file = new File("report.json")
+    val file = new File(s"$localName-report-${LocalDate.now().toString}.json")
 
 
     log(s"Loaded ${ctx.level1.size} PanSpec(s) level1")
