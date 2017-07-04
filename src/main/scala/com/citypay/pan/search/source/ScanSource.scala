@@ -1,5 +1,8 @@
 package com.citypay.pan.search.source
 
+import java.time.LocalDateTime
+
+import com.citypay.pan.search.source.CommandLineScanListener.started
 import com.citypay.pan.search.{ScanExecutionContext, ScanExecutor, ScanReport, SearchContext}
 
 import scala.collection.mutable.ListBuffer
@@ -67,6 +70,7 @@ object CommandLineScanListener extends ScanListener {
     var count: Int = 0
     var anticipated: Int = 0
     var matchCount: Int = 0
+    private var started = LocalDateTime.now()
 
     def percentageComplete = {
       if (count == 0 || anticipated == 0)
@@ -75,8 +79,12 @@ object CommandLineScanListener extends ScanListener {
         100.0 * (count.toDouble / anticipated.toDouble)
     }
 
-    override def complete(scanSource: ScanSource): Unit = {}
-    override def started(scanSource: ScanSource): Unit = {}
+    override def complete(scanSource: ScanSource): Unit = {
+      started = LocalDateTime.now()
+    }
+    override def started(scanSource: ScanSource): Unit = {
+      started = LocalDateTime.now()
+    }
 
     override def scanItem(scanSource: ScanSource, name: String): Unit = {
       count = count + 1
@@ -93,6 +101,15 @@ object CommandLineScanListener extends ScanListener {
     override def anticipated(scanSource: ScanSource, count: Int): Unit = {
       anticipated = anticipated + count
     }
+
+    def duration: String = {
+      import java.time.temporal.ChronoUnit
+      val secs = ChronoUnit.SECONDS.between(started, LocalDateTime.now()) % 60
+      val minutes = ChronoUnit.MINUTES.between(started, LocalDateTime.now()) % 60
+      val hours = ChronoUnit.HOURS.between(started, LocalDateTime.now())
+      "%02d:%02d:%02d".format(hours, minutes, secs)
+    }
+
   }
 
   private var threads = ListBuffer[ThreadScanListener]()
@@ -101,21 +118,21 @@ object CommandLineScanListener extends ScanListener {
 
     val sb = new StringBuilder
 
-    threads.foreach(t => sb.append("\r"))
-
     threads.foreach(t => {
+      sb.append("\r")
       sb.append("%20s".format(t.thread.getName))
       sb.append("|")
       val i = t.percentageComplete
-      val s = "=" * i.toInt
+      val s = "=" * (i.toInt / 4)
       sb.append(s)
       sb.append(">")
-      sb.append(" " * (100 - s.length))
-//      sb.append(" | A: %04d".format(t.anticipated))
-//      sb.append(" | C: %04d".format(t.count))
-      sb.append(" | M: %04d".format(t.matchCount))
-      sb.append(" | %04d%%".format(i.toInt))
-      sb.append("\n")
+      sb.append(" " * (25 - s.length))
+      sb.append(" | A: %08d".format(t.anticipated))
+      sb.append(" | C: %08d".format(t.count))
+      sb.append(" | M: %08d".format(t.matchCount))
+      sb.append(" | %03d%%".format(i.toInt))
+      sb.append(" | %s".format(t.duration))
+//      sb.append("\n")
     })
 
     print(sb.toString)
