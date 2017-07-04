@@ -37,4 +37,6 @@ mappings in Universal <+= (packageBin in Compile, sourceDirectory ) map {(_, src
   src / "main" / "resources" / "search.conf" -> "conf/search.conf"
 }
 
+scriptClasspath := Seq("../conf", "*")
+
 
