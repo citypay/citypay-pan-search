@@ -1,5 +1,5 @@
 {
-  "language": "java",
+  "language": "scala",
   "group": "stable",
   "dist": "trusty",
   "os": "linux"
