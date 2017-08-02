@@ -96,6 +96,7 @@ Database searching requires a valid driver which must be provided in the classpa
 |-----------|-----------|-------------|
 | chd.level1 | `chd object` | Contains an array of chd specs for analysis at a level 1 stage. Should be short digits for fast searching. Recommended as 1 or 2 digits |
 | chd.level2 | `chd object` | Contains an array of chd specs for analysis at a level 2 stage. Should be longer than level1 by 1 or more positions. The more accurate these values, the less false positives are found |
+| chd.falsePositives | `string array` | Contains an array of false positive strings which are checked at the point that a match is found. Examples are `2222222222222222` |
 
 CHD Specs
 
