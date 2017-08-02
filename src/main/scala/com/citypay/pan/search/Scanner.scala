@@ -13,6 +13,7 @@ import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
+import scala.collection.JavaConverters._
 
 
 /**
@@ -51,6 +52,8 @@ object Scanner extends Loggable with Timeable {
       override def level1: List[PanSpec] = PanSpec.load(chdConf, 1)
 
       override def level2: List[PanSpec] = PanSpec.load(chdConf, 2)
+
+      override def falsePositives = chdConf.getStringList("chd.falsePositives").asScala.toList
 
       override def stopOnFirstMatch: Boolean = config.stopOnFirstMatch
 

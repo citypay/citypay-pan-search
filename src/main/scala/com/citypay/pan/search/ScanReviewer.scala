@@ -76,7 +76,6 @@ trait ScanReviewer {
                          limit: Int): List[MatchResult] = {
 
 
-
     def findInSpec(specs: List[PanSpec], accum: List[MatchResult]): List[MatchResult] = {
       specs.headOption.fold(accum) { spec =>
         InspectionScanner("level1", spec, inspectionBuffer, offset, limit) match {
@@ -107,6 +106,10 @@ trait ScanReviewer {
 
   }
 
+  def checkFalsePositiveRegistry(str: String): Boolean = {
+    !ctx.falsePositives.contains(str)
+  }
+
 
   /**
     * Runs a level 2 match (with a bad reference to Mark King to show my age!)
@@ -127,11 +130,15 @@ trait ScanReviewer {
 
       trace(s"InspectionScanner: level2, spec=$spec, i=$i")
 
+      val str = new String(matched.expectedValue)
+
       // if we are equal or over the min length of the spec, run a luhn check on the whole value as a shortcut,
       // return only if a valid match
-      if (i >= spec.length && LuhnCheck(new String(matched.expectedValue))) {
+      if (i >= spec.length && LuhnCheck(str)) {
         traceEnd(", match, luhncheck")
-        true
+
+        // check for false positive matches
+        checkFalsePositiveRegistry(str)
       }
 
       // use the expected length to restrict the search, return false if we have exceeded or matched it
@@ -162,6 +169,23 @@ trait ScanReviewer {
 
   }
 
+  private def falsePos(tracer: Tracer) = {
+
+    import tracer._
+    trace(", inspection buffer > 2 (reset)")
+
+    // do not add it doesn't look like a card number based on sequence of entered digits
+    trace(", reset-buffer")
+    inspectionBuffer.reset()
+    0
+  }
+
+  private def traceReset(i: Int, offset: Int, location: String, reviewPos: Int, tracer: Tracer) = {
+    if (i > offset && i % 16 == 0) {
+      tracer.traceEnd()
+    }
+    tracer.trace("\n%s, analysis-buffer: i=%06d, offset=%06d, pos=%06d", location, i, offset + i, reviewPos)
+  }
 
   def reviewAnalysisBuffer(offset: Int,
                            read: Int,
@@ -182,85 +206,47 @@ trait ScanReviewer {
 
       // iterate an index from 0 to read
       for (i <- 0 until read) {
-
         colNo = colNo + 1
+        traceReset(i, offset, location, reviewPos, _tracer)
 
-        if (i > offset && i % 16 == 0) traceEnd()
-        trace("\n%s, analysis-buffer: i=%06d, offset=%06d, pos=%06d", location, i, offset + i, reviewPos)
-
-        // review the incoming bytes and push to the inspection buffer if numeric
-        val byte = analysisBuffer.get(offset + i)
+        val byte = analysisBuffer.get(offset + i) // review the incoming bytes and push to the inspection buffer if numeric
         trace(", byte=0x%02X", byte)
-
         // restrict further analysis based on an int value
         if (byte >= 0x30 && byte <= 0x39) {
-
           // we can say that if the last recorded value's index > 2 (i.e. allow 4000-000)
           // then it is immediately a false positive result
           if (inspectionBuffer.position() > 0 && (offset + i - inspectionBuffer.lastEnteredIndex) > 2) {
-
-            trace(", inspection buffer > 2 (reset)")
-
-            // do not add it doesn't look like a card number based on sequence of entered digits
-            trace(", reset-buffer")
-            inspectionBuffer.reset()
-            reviewPos = 0
-
-
+            reviewPos = falsePos(_tracer)
             // if this is the first inspected numeric then add
             // but only add if it matches possible leading pan digits
           } else if (inspectionBuffer.position() == 0 && ctx.leadingPanDigits.contains(byte)) {
-
             val j = inspectionBuffer.put(byte, offset + i, lineNo, colNo)
             trace(", L, put(idx=%s, i=%02d)", offset + i, j)
-
-
           } else if (inspectionBuffer.position() == 0) {
-
             trace(", not leadingPanDigit, ignoring")
-
-
             // otherwise it seems to be middle numerics that may make up a pan, add and continue
           } else {
-
 
             val j = inspectionBuffer.put(byte, offset + i, lineNo, colNo)
             trace(", d, put(idx=%s, i=%02d)", offset + i, j)
             trace(s", ins-pos=${inspectionBuffer.position()}")
 
-
             // check inspection buffer length to see if it is in a position for
             // inspection which we can say is the minimum length digits or more
             if (inspectionBuffer.position() >= ctx.minimumLength) {
-
               traceEnd(s" ---> Inspect (ins-pos=${inspectionBuffer.position()}, rev-pos=$reviewPos) <--- ${potentialMatch.mkString("\n", ",\n", "")}")
-
               val result = review(inspectionBuffer, potentialMatch, location, reviewPos, inspectionBuffer.position())
-
-              val matched = result.collect {
-                case m: Match => m
-              }
-
-              matched.foreach(m =>
-                sec.report.incStat(Matched)
-              )
-
+              val matched = result.collect { case m: Match => m }
+              matched.foreach(m => sec.report.incStat(Matched))
               if (ctx.stopOnFirstMatch && matched.nonEmpty) {
                 return ReviewResult(matched, lineNo, colNo)
               }
-
               matches ++= matched
               trace("Matched=%d", matched.size)
-
-              potentialMatch = result.collect {
-                case pm: PotentialMatch => pm
-              }
+              potentialMatch = result.collect { case pm: PotentialMatch => pm }
               trace(", Potential=%d", potentialMatch.size)
 
-              val noMatches = result.collect {
-                case n: NoMatch => n
-              }
-
+              val noMatches = result.collect { case n: NoMatch => n }
               traceEnd(", Nomatch=%d".format(noMatches.size))
 
               // if we have no potential matches, we can reset the inspection buffer

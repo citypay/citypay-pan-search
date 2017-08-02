@@ -26,6 +26,11 @@ trait SearchContext {
   def level2: List[PanSpec] = level1
 
   /**
+    * @return a list of strings which are false positive matches and should be ignored
+    */
+  def falsePositives: List[String] = Nil
+
+  /**
     * @return a list of scan sources
     */
   def sources: List[ScanSource]
