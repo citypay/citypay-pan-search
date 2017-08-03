@@ -18,6 +18,7 @@ object FileSignatures {
   // list of file signatures to map to a file review process, only common items with header values are created
   // formats such as RIFF do not check later in the document as these are unlikely to expose data
   val List = Map(
+    sig("olk14Message:olk14Message:4D 4C 52 43") -> None, // Outlook pointer files which frequently provide FPs
     sig("Lempel-Ziv-Welch:z,tar.z:1F 9D") -> ArchiveFormat.LZMA,
     sig("LZH:z,tar.z:1F A0") -> ArchiveFormat.LZH,
     sig("Bzip2:bz2:42 5A 68") -> ArchiveFormat.BZIP2,

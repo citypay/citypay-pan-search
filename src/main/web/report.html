@@ -65,8 +65,10 @@
 
 <div  class="container" ng-controller="CPPS">
     <h1>Pan Search Report</h1>
+    <input type="text" class="form-control" placeholder="URL of file to search" ng-model="filename" />
+    <button ng-click="load()">Load</button>
 
-
+    {{ filename }}
     {{ data.meta['os.name'] }}
     <div ng-repeat="report in data.subReports" ng-include="'scan_report.html'">
 
