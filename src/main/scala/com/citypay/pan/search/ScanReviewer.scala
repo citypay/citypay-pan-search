@@ -285,7 +285,7 @@ trait ScanReviewer {
 
 
             // check for grouping characters (space, -, new line or carriage return) as these are allowed
-            if (byte == 0x20 || byte == 0x2D || byte == 0x0A || byte == 0x0D) {
+            if (byte == 0x20 || byte == 0x2D) {
               trace(", acceptable delimiter"); // continue
             } else {
               trace(", reset-buffer")
