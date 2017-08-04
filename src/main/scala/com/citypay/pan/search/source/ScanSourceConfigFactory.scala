@@ -33,7 +33,7 @@ object ScanSourceConfigFactory {
         NioFileSystemScanner(
           expandRoots(c.getStringList("root").asScala.toList),
           c.string("pattern", "**"), // default glob
-          c.stringOpt("exclude"),
+          c.getStringList("exclude").asScala.toList,
           c.boolean("includeHiddenFiles", default = false),
           c.boolean("recursive", default = true),
           c.int("maxDepth", default = -1)

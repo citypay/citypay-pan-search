@@ -38,7 +38,7 @@ object NioFileSystemScanner {
   */
 case class NioFileSystemScanner(root: List[String],
                                 include: String,
-                                exclude: Option[String],
+                                exclude: List[String],
                                 includeHiddenFiles: Boolean = false,
                                 recursive: Boolean = true,
                                 maxDepth: Int = -1) extends ScanSource with Loggable with Timeable {
@@ -83,7 +83,7 @@ case class NioFileSystemScanner(root: List[String],
 
   def scanDirPath(system: String, dir: Path, depth: Int)(implicit sec: ScanExecutionContext): ScanExecutionContext = {
 
-    use (directoryScanStream(dir)) { stream =>
+    use(directoryScanStream(dir)) { stream =>
 
       val isUnderMaxDepth = if (maxDepth <= 0) true else depth < maxDepth
 
@@ -148,17 +148,24 @@ case class NioFileSystemScanner(root: List[String],
   }
 
 
-  private def directoryScanStream(path: Path): DirectoryStream[Path] = {
+  def directoryScanStream(path: Path): DirectoryStream[Path] = {
 
-    val fs = path.getFileSystem
-    val includeMatcher = fs.getPathMatcher("glob:" + include)
-    val excludeMatcher = exclude.map(ex => fs.getPathMatcher(ex))
+    val fs: FileSystem = path.getFileSystem
+    val includeMatcher: PathMatcher = fs.getPathMatcher("glob:" + include)
+    val excludeMatcher: List[PathMatcher] = exclude.map(ex => fs.getPathMatcher("glob:" + ex))
 
     val filter = new DirectoryStream.Filter[Path]() {
+
+
+      private def exclude(entry: Path): Boolean = {
+        val ex = excludeMatcher.find(m => m.matches(entry))
+        ex.fold(false)(m => true)
+      }
+
       override def accept(entry: Path): Boolean =
-        includeMatcher.matches(entry.getFileName) &&
-          excludeMatcher.fold(true)(!_.matches(entry.getFileName))
+        includeMatcher.matches(entry.getFileName) && !exclude(entry)
     }
+
 
     fs.provider.newDirectoryStream(path, filter)
 
