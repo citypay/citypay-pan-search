@@ -21,6 +21,8 @@ object InspectionNoMatch extends InspectionResult {
   */
 object InspectionScanner {
 
+  def isPrefixDelimiter(b: Byte): Boolean = b < '0' || b > '9' && b < 'A' || b > 'Z' && b < 'a' || b > 'z'
+
 
   /**
     * Runs an inspection of collated data
@@ -86,10 +88,34 @@ object InspectionScanner {
           trace(s"proposed(offset=$offset, len=${i + 1}, arrlen=(${inspectionBuffer.length}))")
           val proposed = inspectionBuffer.toString(offset, i + 1)
           if (tracer(", luhn")(LuhnCheck(proposed))) {
-            //noinspection ScalaStyle
-            return InspectedProposedFind(proposed, offset, Location(startLine, startCol),
-              Location(inspectionBuffer.channelIndexLineNo(i), inspectionBuffer.channelIndexColNo(i))
-            )
+
+            // the proposed value has passed a luhn check
+            // to prevent false positives, ensure that the value before the offset is a non alpha numeric value
+            // a lot of false positives can be found in id strings such as session ids or UIDs
+            if (offset > 0) {
+
+              val prefix = inspectionBuffer.get(offset - 1)
+              if (isPrefixDelimiter(prefix)) {
+                //noinspection ScalaStyle
+                return InspectedProposedFind(proposed, offset, Location(startLine, startCol),
+                  Location(inspectionBuffer.channelIndexLineNo(i), inspectionBuffer.channelIndexColNo(i))
+                )
+              } else {
+                // False positive
+                return InspectionNoMatch
+              }
+
+
+
+            } else {
+              //noinspection ScalaStyle
+              return InspectedProposedFind(proposed, offset, Location(startLine, startCol),
+                Location(inspectionBuffer.channelIndexLineNo(i), inspectionBuffer.channelIndexColNo(i))
+              )
+            }
+
+
+
           } else if (i >= spec.maxLength - 1) {
             traceEnd(", len-exhausted")
             //noinspection ScalaStyle

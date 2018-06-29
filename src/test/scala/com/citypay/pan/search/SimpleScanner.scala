@@ -21,6 +21,7 @@ class SimpleScanner extends FlatSpec {
   }
 
 
+
   val ctxFirstMatch = new UnitTestSearchContext {
     override def level1: List[PanSpec] = List(
       PanSpec("Example", "1", "placeholder", 40, 16, 16)
@@ -81,7 +82,6 @@ class SimpleScanner extends FlatSpec {
     //    new SimpleReportRenderer(System.out).render(r)
     assert(r.matchCount === 2)
   }
-
 
   // zip scanning not currently working, removed test.
 //  it should "scan a zip file" in {
