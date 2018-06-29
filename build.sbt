@@ -7,7 +7,7 @@ lazy val sevenzipjbindingVersion = "9.20-2.00beta"
 lazy val root = (project in file("."))
   .settings(
     name := "citypay-pan-search",
-    version := "0.1.0",
+    version := "0.1.1",
     scalaVersion := "2.12.2",
     libraryDependencies ++= Seq(
 
